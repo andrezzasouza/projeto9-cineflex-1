@@ -7,7 +7,7 @@ export default function Header(){
     );
 }
 const Container = styled.div`
-width: 375px;
+width: 100%;
 height: 67px;
 background-color: #C3CFD9;
 display: flex;
