@@ -3,6 +3,7 @@ import Header from "./Components/Header";
 import ResetCSS from "./Components/ResetCSS";
 import GlobalStyle from "./Components/GlobalStyles";
 import MainPage from "./Components/MainPage";
+import Sessions from "./Components/Sessions";
 
 export default function App(){
     return (
@@ -12,8 +13,8 @@ export default function App(){
             <Header />
             <Routes>
                 <Route path="/" element = {<MainPage />} />
-                {/* <Route path="/sessoes" element = {} />
-                <Route path="/assentos" element = {} /> */}
+                <Route path="/sessoes/:movieID" element = {<Sessions />} />
+                {/* <Route path="/assentos" element = {} />  */}
             </Routes>
         </BrowserRouter>
 
