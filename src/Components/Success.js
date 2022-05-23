@@ -13,6 +13,10 @@ export default function Success(props) {
                 {props.movieInfo.day === undefined ? "" : <p>{props.movieInfo.day.date}  {props.movieInfo.name}</p>}
             </Container>
             <Container>
+                <strong>Ingressos</strong>
+                {props.seatsId === undefined ? "" : props.seatsId.map((seat, index) => <p key={index}>Assento: {seat.toString().slice(2)}</p>)}
+            </Container>
+            <Container>
                 <strong>Comprador</strong>
                 <p>Nome: {props.name}</p>
                 <p>CPF: {props.cpf}</p>
