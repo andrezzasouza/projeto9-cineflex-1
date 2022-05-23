@@ -1,16 +1,14 @@
 import axios from "axios";
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import ImageContainer from "./ImageContainer";
 import Select from "./Select";
 import Footer from "./Footer";
 
-export default function Seats() {
+export default function Seats({movieInfo, setMovieInfo, seatsId, setSeatsId, name, setName, cpf, setCpf}) {
     const { sessionID } = useParams();
     const [seats, setSeats] = useState([]);
-    const [movieInfo, setMovieInfo] = useState({});
-    const [seatsId, setSeatsId] = useState([]);
 
     useEffect(() => {
         const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${sessionID}/seats`);
@@ -46,7 +44,7 @@ export default function Seats() {
             <Container>
                 {["Selecionado", "Disponível", "Indisponível"].map((seatType, index) => <SeatsExample key={index} seatType={seatType} />)}
             </Container>
-            <Forms seatsId={seatsId} />
+            <Forms seatsId={seatsId} name={name} setName={setName} cpf={cpf} setCpf={setCpf}/>
             <Footer>
                 <ImageContainer>
                     { movieInfo.movie === undefined ? "" : <img src={movieInfo.movie.posterURL} alt={`Poster de ${movieInfo.movie.title}`} />}
@@ -95,32 +93,30 @@ function NormalSeats(props) {
 }
 
 function Forms(props) {
-    const [name, setName] = useState("");
-    const [cpf, setCpf] = useState("");
+    const navigate = useNavigate();
 
-    function submitTickets(event) {
-        event.preventDefault();
+    function submitTickets() {
         const APIobject = {
             ids: props.seatsId,
-            name: name,
-            cpf: cpf
+            name: props.name,
+            cpf: props.cpf
         }
         const promise = axios.post("https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many", APIobject);
-        promise.then()
+        promise.then(navigate("/sucesso", { replace: true }));
     }
 
     return(
         <form onSubmit={submitTickets}>
             <FormsContainer>
                 <label htmlFor="name">Nome do Comprador:</label>
-                <input type="text" name="name" valeu={name} required placeholder="Digite seu nome..." onChange={(e) => setName(e.target.value)} />
+                <input type="text" name="name" valeu={props.name} required placeholder="Digite seu nome..." onChange={(e) => props.setName(e.target.value)} />
             </FormsContainer>
             <FormsContainer>
                 <label htmlFor="name">CPF do Comprador:</label>
-                <input type="text" name="cpf" valeu={cpf} required placeholder="Digite seu CPF..." onChange={(e) => setCpf(e.target.value)} />
+                <input type="text" name="cpf" valeu={props.cpf} required placeholder="Digite seu CPF..." onChange={(e) => props.setCpf(e.target.value)} />
             </FormsContainer>
             <Button>
-                <button onClick={props.test} type="submit">Reservar assento(s)</button>
+                <button type="submit">Reservar assento(s)</button>
             </Button> 
         </form>
     );
